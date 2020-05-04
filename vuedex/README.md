@@ -1,5 +1,9 @@
 # vuedex
 
+
+Este proyecto es par tener un mejor entendimiento de lo qu se tratan las pruebas en una aplicación de Vue
+
+
 ## Project setup
 ```
 npm install

@@ -1,15 +1,15 @@
-<template>
+ <template>
   <div class="component">
     <table class="stats-table">
       <tr>
-        <th>HEIGHT</th>
-        <th>WEIGHT</th>
-        <th>TYPE</th>
+        <th >HEIGHT</th>
+        <th >WEIGHT</th>
+        <th >TYPE</th>
       </tr>
       <tr>
-        <td>{{pokeHeight/10}}m</td>
-        <td>{{pokeWeight/10}}kg</td>
-        <td>{{pokeType}}</td>
+        <td id="height">{{pokeHeight/10}}m</td>
+        <td id="weight">{{pokeWeight/10}}kg</td>
+        <td id="type">{{pokeType}}</td>
       </tr>
     </table>
   </div>
@@ -26,7 +26,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 * {
   --table-widht: 20vw;

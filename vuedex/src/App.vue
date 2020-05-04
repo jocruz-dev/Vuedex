@@ -2,16 +2,22 @@
   <div id="app" :style="{ background: backImg}">
     <section class="app-pokemon-main card">
       <img alt="pokemon" :src="image">
-        <p class="pokemon-name">{{msg}}</p>
-      <button class="button" @click="makeRequest">SEARCH</button>
+        <p class="pokemon-name">{{name}}</p>
+      <!--- Descomenta esta linea para probar la funcionalidad completa
+      <button class="button" @click.prevent="makeRequest">SEARCH</button>
+       comenta la linea de abajo---> 
+      <button class="button" @click.prevent="setData(data)">SEARCH</button>
     </section>
     <section class="app-pokemon-stats">
-      <poke-stats v-bind:poke-weight="weight" v-bind:poke-height="height" v-bind:poke-type="type"></poke-stats>
+      <poke-stats :pokeWeight="weight" :pokeHeight="height" :pokeType="type" ></poke-stats>
       <div class="app-pokemon-stats-abilities card">
-        <p>ABILITIES</p>
+        <p id="abilities">ABILITIES</p>
         <ul>
-          <li v-for="el in abilities" :key="el.name">
+          <li v-for="el in abilities" :key="el">
+            <!---- Descomenta esta linea para probar la funcionalidad completa
             {{el.ability.name}}
+            comenta la linea de abajo--->
+            {{el}}
           </li>
         </ul>
       </div>
@@ -21,18 +27,21 @@
 
 <script>
 import PokeStats from "./components/PokeStats.vue"
-import fetch from "../node_modules/node-fetch"
+import { mockService } from "../public/mockCall";
+// Descomenta esta linea para probar la funcionalidad completa
+//import axios from 'axios'
 
 export default {
   name: 'App',
   data () {
     return {
-      msg: '',
+      name: 'name',
       image: '',
       type: '',
       weight: 0,	
       height: 0,
-      abilities: []
+      abilities: [],
+      data: {}
     }
   },
   computed: {
@@ -44,28 +53,53 @@ export default {
     PokeStats
   },
   methods:{
-  async makeRequest(){
-    let randomSearch = Math.floor(Math.random()*151 + 1) 
-    await fetch(`https://pokeapi.co/api/v2/pokemon/${randomSearch}`)
-    .then((res)=>{
-      return Promise.resolve(res)
-    })
-    .then((res)=>{
-      return res.json()
-    })
-    .then((response)=>{
-      this.msg = response.name
-      this.image = response.sprites.front_default
-      this.type = response.types[0].type.name
-      this.height = response.height
-      this.weight = response.weight
-      this.abilities = response.abilities
-    })
-
+   //Descomenta esta linea para probar la funcionalidad completa 
+   /*async makeRequest(){
+     // el 150 es la cantidad de pokemones que van a estar en el loop, cambialo si quieres ver mas, o menos
+    let randomSearch = await Math.floor(Math.random()*150 + 1) 
+      try {
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${randomSearch}`)
+        const data = response.data
+        this.name = data.name
+        this.weight = data.weight
+        this.height = data.height
+        this.abilities = data.abilities
+        this.image = data.sprites.front_default
+        this.type = data.types.type.name
+        return response
+      } catch (error) {
+        console.log(error)
+      }
+  },**/
+  
+  setData(data) {
+    try {
+      let randomSearch = Math.floor(Math.random()*3)
+      data = data.mock[randomSearch].data
+      this.name = data.name
+      this.weight = data.weight
+      this.height = data.height
+      this.abilities = data.abilities
+      this.image = data.sprites
+      this.type = data.type
+      
+    } catch (error) {
+      console.log(error)
+    }
   }
 },
-  created() {
-    this.makeRequest()
+  async created() {
+
+    //Descomenta esta linea para probar la funcionalidad completa 
+    //await this.makeRequest();
+    //comenta la funcion de abajo
+    await mockService()
+      .then(
+      response => {
+        this.data = response
+        this.setData(response)
+        })
+
   }
 }
 </script>
